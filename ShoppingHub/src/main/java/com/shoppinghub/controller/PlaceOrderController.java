@@ -1,5 +1,6 @@
 package com.shoppinghub.controller;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -9,14 +10,24 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.shoppinghub.dto.OrderDTO;
 import com.shoppinghub.dto.PaytmDetails;
+import com.shoppinghub.dto.PickupLocation;
+import com.shoppinghub.dto.Request;
+import com.shoppinghub.dto.Response;
+import com.shoppinghub.dto.Shipment;
 import com.shoppinghub.entity.Order;
 import com.shoppinghub.entity.Payment;
 import com.shoppinghub.entity.UserBillingAddress;
@@ -57,7 +68,7 @@ public class PlaceOrderController {
 		if(shippingAddressList != null && !shippingAddressList.isEmpty()) {
 			mv.addObject("shippingAddress", shippingAddressList);
 			mv.addObject("billingAddress",(List<UserBillingAddress>)map.get("billingAddress"));
-			mv.setViewName("DefaultAddressPage");
+			mv.setViewName("NewFile");
 			
 		}else {
 			mv.addObject("q" , "0");
@@ -172,9 +183,15 @@ public class PlaceOrderController {
                 if (parameters.get("RESPCODE").equals("01")) {
                     result = "Payment Successful";
                     order.setOrderStatus("Order Placed");
+                    String wayBill = getWayBill();
+                    System.out.println(wayBill);
+                   Request  req = createorderDelivery(wayBill , order);
+//                
                     
                 } else {
                     result = "Payment Failed";
+                    
+                    
                 }
                 orderRepo.save(order);
             } else {
@@ -187,13 +204,63 @@ public class PlaceOrderController {
         mv.addObject("result",result);
         parameters.remove("CHECKSUMHASH");
         mv.addObject("orders",order);
+        
+       
         mv.setViewName("OrderDetailPage");
+        
         return mv;
     }
 	
 	
 	
 	
+
+	private Request createorderDelivery(String wayBill , Order order) {
+			
+		final String uri = "https://staging-express.delhivery.com/api/cmu/create.json";
+	    RestTemplate restTemplate = new RestTemplate();
+	    HttpHeaders headers = new HttpHeaders();
+	    final String accessToken = "8e6534547d445c2d6f677562d07d396dd0fc974b";
+	    headers.setContentType(MediaType.APPLICATION_JSON);
+	    headers.set("Authorization", "Token "+accessToken);
+	    Request request = new Request();
+	    Shipment shipment = new Shipment(order.getShipAdd().getStreet(), order.getUser().getPhone(), "Prepaid",order.getUser().getUsername(),order.getShipAdd().getZipcode(), wayBill);
+	    List<Shipment> shipmentList = request.getShipments();
+	    shipmentList.add(shipment);
+	    PickupLocation pickUpLocation = new PickupLocation("POSTERSURFACE-B2C");
+	    request.setPickupLocation(pickUpLocation);
+	    
+//	    Response result = restTemplate.postForObject( uri, request, Response.class);
+	    HttpEntity<Request> entity = new HttpEntity<Request>(request,headers);
+	      
+	      Response result =  restTemplate.exchange(
+	         uri, HttpMethod.POST, entity, Response.class).getBody();
+	 
+	    System.out.println(result);
+		
+		return null;
+	}
+
+	private String getWayBill() {
+		
+		final String uri = "http://localhost:8080/springrestexample/employees";
+		 
+	    //TODO: Autowire the RestTemplate in all the examples
+	    RestTemplate restTemplate = new RestTemplate();
+	    
+	  //  HashMap<String,String> param = new HashMap<String,String>();
+	  //  param.put("token" ,"8e6534547d445c2d6f677562d07d396dd0fc974b");
+	    ResponseEntity<String> result=null;
+	    try {
+	     result = restTemplate.getForEntity("https://staging-express.delhivery.com/waybill/api/fetch/json/?token=8e6534547d445c2d6f677562d07d396dd0fc974b", String.class);
+	    System.out.println("In Method "+result.getBody());
+	    }catch(Exception e) {
+	    	e.printStackTrace();
+	    }
+		
+		return result.getBody();
+		
+	}
 
 	@GetMapping("/addresspage")
 	public ModelAndView atmCardPage() {
@@ -208,6 +275,12 @@ public class PlaceOrderController {
 		
 		ModelAndView mv = new ModelAndView("OrderDetailPage");
 		
+		return mv;
+	}
+	
+	@GetMapping("/newfile")
+	public ModelAndView address() {
+		ModelAndView mv = new ModelAndView("NewFile");
 		return mv;
 	}
 	

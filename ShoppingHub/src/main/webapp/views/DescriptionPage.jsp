@@ -51,7 +51,7 @@
 				<div class="col d-flex">
 					<a class="btn btn-warning btn-lg text-light" href="/cart/addtocart/${items.id}" role="button">
 						<i class="fa fa-shopping-cart" aria-hidden="true"></i>   Add to cart</a>  &nbsp;
-					<a class="btn btn-danger btn-lg text-light" href="/cart//buynow/${items.id}" role="button">
+					<a class="btn btn-danger btn-lg text-light" href="/cart/buynow/${items.id}" role="button">
 						<i class="fa fa-bolt" aria-hidden="true"></i>   Buy Now</a>
 				</div>
 				</div>

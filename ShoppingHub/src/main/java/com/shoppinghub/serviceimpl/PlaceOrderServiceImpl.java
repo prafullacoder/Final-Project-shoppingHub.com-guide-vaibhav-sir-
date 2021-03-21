@@ -76,22 +76,32 @@ public class PlaceOrderServiceImpl implements PlaceOrderService{
 	public  Order addOrderDetails(OrderDTO dto) {
 		long userId = (long) session.getAttribute("userId");
 		User user = userService.findById(userId);
-		ShippingAddress shippingAdd = new ShippingAddress(dto.getShippingStreet(),dto.getShippingCity(),dto.getShippingState(),dto.getShippingCountry(),dto.getShippingZipcode());
-		UserShippingAddress userShipAdd = new UserShippingAddress(dto.getShippingStreet(),dto.getShippingCity(),dto.getShippingState(),dto.getShippingCountry(),dto.getShippingZipcode());
-		BillingAddress billAdd= null;
-		if(dto.isBillingAddressDifferent()) {
-			billAdd = new BillingAddress(dto.getBillingStreet(),dto.getBillingCity(),dto.getBillingState(),dto.getBillingCountry(),dto.getBillingZipcode());
+		UserShippingAddress userShippingAddr = null;
+		UserBillingAddress userBillingAddr = null;
+		ShippingAddress shippingAdd = null;
+		BillingAddress billingAdd = null;
+		if(dto.getBillingAddressid() != 0 && dto.getShippingAddressid() != 0) {
+			userShippingAddr = userShippingAddressRepository.findById(dto.getShippingAddressid()).get();
+			userBillingAddr =  userBillingAddressRepository.findById(dto.getBillingAddressid()).get();
+			shippingAdd = new ShippingAddress(userShippingAddr.getStreet(),userShippingAddr.getCity(),userShippingAddr.getState(),userShippingAddr.getCountry(),userShippingAddr.getZipcode());
+			billingAdd = new BillingAddress(userBillingAddr.getStreet(),userBillingAddr.getCity(),userBillingAddr.getState(),userBillingAddr.getCountry(),userBillingAddr.getZipcode());
 		}else {
-			billAdd = new BillingAddress(dto.getShippingStreet(),dto.getShippingCity(),dto.getShippingState(),dto.getShippingCountry(),dto.getShippingZipcode());
+			shippingAdd = new ShippingAddress(dto.getShippingStreet(),dto.getShippingCity(),dto.getShippingState(),dto.getShippingCountry(),dto.getShippingZipcode());
+			userShippingAddr = new UserShippingAddress(dto.getShippingStreet(),dto.getShippingCity(),dto.getShippingState(),dto.getShippingCountry(),dto.getShippingZipcode());
+			if(dto.isBillingAddressDifferent()) {
+				billingAdd = new BillingAddress(dto.getBillingStreet(),dto.getBillingCity(),dto.getBillingState(),dto.getBillingCountry(),dto.getBillingZipcode());
+			}else {
+				billingAdd = new BillingAddress(dto.getShippingStreet(),dto.getShippingCity(),dto.getShippingState(),dto.getShippingCountry(),dto.getShippingZipcode());
+			}
+			userBillingAddr = new UserBillingAddress(billingAdd.getStreet(),billingAdd.getCity(),billingAdd.getState(),billingAdd.getCountry(),billingAdd.getZipcode());
+			userShippingAddr.setUser(user);
+			userBillingAddr.setUser(user);
+			userBillingAddressRepository.save(userBillingAddr);
+			userShippingAddressRepository.save(userShippingAddr);
 		}
-		UserBillingAddress userBillAdd = new UserBillingAddress(billAdd.getStreet(),billAdd.getCity(),billAdd.getState(),billAdd.getCountry(),billAdd.getZipcode());
-		userShipAdd.setUser(user);
-		userBillAdd.setUser(user);
-		userBillingAddressRepository.save(userBillAdd);
-		userShippingAddressRepository.save(userShipAdd);
 		shippingAddRepo.save(shippingAdd);
-		billingAddRepo.save(billAdd);
-		return placeOrder(user,shippingAdd,billAdd, dto.getCartItemId());
+		billingAddRepo.save(billingAdd);
+		return placeOrder(user,shippingAdd,billingAdd, dto.getCartItemId());
 		
 		
 	}

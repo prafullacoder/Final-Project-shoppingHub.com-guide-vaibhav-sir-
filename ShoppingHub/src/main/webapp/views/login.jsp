@@ -10,7 +10,7 @@
 <%@include file="header.jsp" %>
 </header>
 
-<body style="background-image:url('/images/banner4.jpg')">
+<body>
 	<div
 		style="width: 100vw; height: 70vh; background: linear-gradient(rgba(0, 0, 0, 0.01), #009688)"
 		class=" d-flex justify-content-center align-items-center m-0 p-0">

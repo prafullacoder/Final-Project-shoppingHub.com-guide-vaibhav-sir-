@@ -91,7 +91,7 @@ public class PlaceOrderServiceImpl implements PlaceOrderService{
 		}else {
 			shippingAdd = new ShippingAddress(dto.getShippingStreet(),dto.getShippingCity(),dto.getShippingState(),dto.getShippingCountry(),dto.getShippingZipcode());
 			userShippingAddr = new UserShippingAddress(dto.getShippingStreet(),dto.getShippingCity(),dto.getShippingState(),dto.getShippingCountry(),dto.getShippingZipcode());
-			if(dto.isBillingAddressDifferent()) {
+			if(dto.getIsBillingAddressDifferent().equals("true")) {
 				billingAdd = new BillingAddress(dto.getBillingStreet(),dto.getBillingCity(),dto.getBillingState(),dto.getBillingCountry(),dto.getBillingZipcode());
 			}else {
 				billingAdd = new BillingAddress(dto.getShippingStreet(),dto.getShippingCity(),dto.getShippingState(),dto.getShippingCountry(),dto.getShippingZipcode());
@@ -131,10 +131,8 @@ public class PlaceOrderServiceImpl implements PlaceOrderService{
 			
 			for(CartItem cartItem : cartItems) {
 				cartItem.setOrder(order);
-				cartItem.setShopCart(null);
 			}
 			cartRepo.saveAll(cartItems);
-			shoppingCart.delete(cart);
 		}
 		
 		

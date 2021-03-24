@@ -10,7 +10,10 @@
 <%@include file="header.jsp" %>
 </header>
 
-<body style="background-image:url('/images/banner4.jpg')">
+<body>
+
+		
+
 
 	<div
 		style="width: 100%; height: 70vh; background: linear-gradient(rgba(0, 0, 0, 0.01), #009688), url(background_img.jpg)"
@@ -49,7 +52,9 @@
 			<div class="form-group mb-1">
 
 				<input type="password" class="form-control"
-					placeholder="Enter password" name="password" pattern="(?=.\d)(?=.[a-z])(?=.*[A-Z]).{8,}" required autocomplete="off"/>
+					placeholder="Enter password" name="password" pattern="(?=.*\d).{8,}" required autocomplete="off"/>
+					<i>min 8 character and number required  </i>
+
 			</div>
 			<div class="form-group mb-1">
 
@@ -70,8 +75,11 @@
 		</form>
 
 	</div>
+	
+
 
 </body>
+<div style="500px"></div>
 <footer>
 <%@include file="footer.jsp" %>
 </footer>

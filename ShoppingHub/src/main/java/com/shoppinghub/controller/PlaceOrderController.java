@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -35,11 +36,15 @@ import com.shoppinghub.dto.ShipmentTracker;
 import com.shoppinghub.entity.CartItem;
 import com.shoppinghub.entity.Order;
 import com.shoppinghub.entity.Payment;
+import com.shoppinghub.entity.ShoppingCart;
+import com.shoppinghub.entity.User;
 import com.shoppinghub.entity.UserBillingAddress;
 import com.shoppinghub.entity.UserShippingAddress;
 import com.shoppinghub.repository.CartRepository;
 import com.shoppinghub.repository.OrderRepository;
 import com.shoppinghub.repository.PaymentRepository;
+import com.shoppinghub.repository.ShoppingCartRepository;
+import com.shoppinghub.repository.UserRepository;
 import com.shoppinghub.service.CartService;
 import com.shoppinghub.service.PaytmService;
 import com.shoppinghub.service.PlaceOrderService;
@@ -66,6 +71,15 @@ public class PlaceOrderController {
 	
 	@Autowired
 	private CartRepository cartRepo;
+	
+	@Autowired
+	private UserRepository userRepo;
+	
+	@Autowired
+	private ShoppingCartRepository shoppingCart;
+	
+	@Autowired
+	private HttpSession session;
 	
 	@Autowired
 	private PaymentRepository paymentRepo;
@@ -184,6 +198,12 @@ public class PlaceOrderController {
     			 paymentMode,respMsg, status, txnAmount,  txDate, txnId);
         Order order = orderRepo.findByOrderNo(orderId);
         
+        User user = order.getUser();
+        
+        if(user != null) {
+        	
+				session.setAttribute("userId", user.getId());
+        }
         payment.setOrder(order);
      
         boolean isValideChecksum = false;
@@ -195,6 +215,18 @@ public class PlaceOrderController {
             	 order.setPayment(payment);
                 if (parameters.get("RESPCODE").equals("01")) {
                     result = "Payment Successful";
+                    List<CartItem> cartItemList =  cartRepo.findByOrder(order);
+                    ShoppingCart cart=null;
+                    if(cartItemList != null && !cartItemList.isEmpty())
+                     cart= cartItemList.get(0).getShopCart();
+                	for(CartItem cartItem : cartItemList) {
+        				cartItem.setOrder(order);
+        				cartItem.setShopCart(null);
+        			}
+                	cartRepo.saveAll(cartItemList);
+                	if(cart != null) {
+                	shoppingCart.delete(cart);
+                	}
                     order.setOrderStatus("Order Placed");
                     String wayBill = getWayBill();
                     System.out.println(wayBill);
@@ -223,7 +255,7 @@ public class PlaceOrderController {
         mv.addObject("result",result);
         parameters.remove("CHECKSUMHASH");
         mv.addObject("orders",order);
-        
+      
        
         mv.setViewName("OrderDetailPage");
         

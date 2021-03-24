@@ -95,7 +95,7 @@
 	<div class="row">
 		<div class="col d-flex justify-content-center">
 			<div class="mb-3 form-check">
-							<input type="checkbox" class="form-check-input"
+							<input type="checkbox" value="true" class="form-check-input"
 								name="isBillingAddressDifferent" onclick="handleClick(this)">
 							<label class="form-check-label" for="isBillingAddressDifferent">IsBillingAddressDifferent</label>
 						</div>

@@ -22,7 +22,7 @@ public class OrderDTO {
 	private String shippingZipcode;
 	private long shippingAddressid;
 	
-	private boolean isBillingAddressDifferent;
+	private String isBillingAddressDifferent;
 	
 	private String cartItemId;
 	public String getBillingStreet() {
@@ -100,17 +100,17 @@ public class OrderDTO {
 	public void setShippingAddressid(long shippingAddressid) {
 		this.shippingAddressid = shippingAddressid;
 	}
-	public boolean isBillingAddressDifferent() {
-		return isBillingAddressDifferent;
-	}
-	public void setBillingAddressDifferent(boolean isBillingAddressDifferent) {
-		this.isBillingAddressDifferent = isBillingAddressDifferent;
-	}
 	public String getCartItemId() {
 		return cartItemId;
 	}
 	public void setCartItemId(String cartItemId) {
 		this.cartItemId = cartItemId;
+	}
+	public String getIsBillingAddressDifferent() {
+		return isBillingAddressDifferent;
+	}
+	public void setIsBillingAddressDifferent(String isBillingAddressDifferent) {
+		this.isBillingAddressDifferent = isBillingAddressDifferent;
 	}
 	
 	

@@ -52,6 +52,7 @@
 			
 			<td style="text-align:center">${orders.total}</td>
 			<td style="text-align:center">${orders.orderDate}</td>
+			
 			<td style="text-align:center">${orders.trackingId}</td>
 			<td style="text-align:center">${orders.payment.paymentMode}</td>
 			<td style="text-align:center">

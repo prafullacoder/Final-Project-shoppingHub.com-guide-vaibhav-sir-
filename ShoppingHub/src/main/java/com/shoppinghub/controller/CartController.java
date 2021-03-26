@@ -2,6 +2,7 @@ package com.shoppinghub.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import com.shoppinghub.entity.Category;
 import com.shoppinghub.entity.ShoppingCart;
 import com.shoppinghub.entity.UserBillingAddress;
 import com.shoppinghub.entity.UserShippingAddress;
+import com.shoppinghub.repository.CartRepository;
 import com.shoppinghub.service.CartService;
 import com.shoppinghub.service.CategoryService;
 import com.shoppinghub.service.PlaceOrderService;
@@ -26,6 +28,9 @@ public class CartController {
 	
 	@Autowired
 	private CartService cartService;
+	
+	@Autowired
+	private CartRepository cartRepository;
 	
 	@Autowired
 	private ShoppingCartService shoppingCartService;
@@ -41,6 +46,19 @@ public class CartController {
 		ModelAndView mv = new ModelAndView();
 		CartItem cart = cartService.buyNow(id);
 		if(cart != null) {
+			
+			mv.setViewName("redirect:/cart/address/"+cart.getId());
+		}else
+			mv.setViewName("redirect:/user/login-views");
+		return mv;
+	}
+	
+	@GetMapping("/address/{id}")
+	public ModelAndView getDefaultAddress(@PathVariable long id) {
+		ModelAndView mv = new ModelAndView();
+		Optional<CartItem> optionalCart = cartRepository.findById(id);
+		if(optionalCart != null && optionalCart.isPresent()) {
+			CartItem cart = optionalCart.get();
 			Map<String,Object> map = placeOrderService.findAddress();
 			List<UserShippingAddress> shippingAddressList = (List<UserShippingAddress>) map.get("shippingAddress");
 			if(shippingAddressList != null && !shippingAddressList.isEmpty()) {
@@ -50,12 +68,19 @@ public class CartController {
 				
 			}else {
 				mv.addObject("q" , "0");
-				mv.setViewName("AddressPage");
+				mv.setViewName("NewFile2");
 			}
 			mv.addObject("cart",cart);
-			
-		}else
-			mv.setViewName("login");
+		}else {
+			mv.setViewName("redirect:/user/login-views");
+		}
+		
+		return mv;
+	}
+	
+	@GetMapping("/addNewAddress")
+	public ModelAndView addNewAddress() {
+		ModelAndView mv = new ModelAndView("NewFile2");
 		return mv;
 	}
 	
@@ -65,18 +90,18 @@ public class CartController {
 		ShoppingCart cart= cartService.addToCart(id);
 		if(cart != null) {
 			System.out.println(cart.getId());
-			mv.setViewName("MyCart");
+			mv.setViewName("redirect:/cart/showcart");
 			mv.addObject("carts",cart.getCartItems());
 			mv.addObject("total" , cart.getGrandTotal());
 		}
 		else
-			mv.setViewName("login");
+			mv.setViewName("redirect:/user/login-views");
 		return mv;
 	}
 	
 	@GetMapping("/removeitem/{id}")
 	public ModelAndView removeQty(@PathVariable long id) {
-		ModelAndView mv = new ModelAndView("MyCart");
+		ModelAndView mv = new ModelAndView("redirect:/cart/showcart");
 		ShoppingCart cart = cartService.removeQty(id);
 		mv.addObject("carts" , cart.getCartItems());
 		mv.addObject("total", cart.getGrandTotal());
@@ -85,7 +110,7 @@ public class CartController {
 	
 	@GetMapping("/deketecartitem/{id}")
 	public ModelAndView deleteCartItem(@PathVariable long id) {
-		ModelAndView mv = new ModelAndView("MyCart");
+		ModelAndView mv = new ModelAndView("redirect:/cart/showcart");
 		ShoppingCart cart = cartService.deleteCartItem(id);
 		mv.addObject("carts" , cart.getCartItems());
 		mv.addObject("total", cart.getGrandTotal());

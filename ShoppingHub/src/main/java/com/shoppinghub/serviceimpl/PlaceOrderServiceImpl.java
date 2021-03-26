@@ -2,6 +2,7 @@ package com.shoppinghub.serviceimpl;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -91,7 +92,7 @@ public class PlaceOrderServiceImpl implements PlaceOrderService{
 		}else {
 			shippingAdd = new ShippingAddress(dto.getShippingStreet(),dto.getShippingCity(),dto.getShippingState(),dto.getShippingCountry(),dto.getShippingZipcode());
 			userShippingAddr = new UserShippingAddress(dto.getShippingStreet(),dto.getShippingCity(),dto.getShippingState(),dto.getShippingCountry(),dto.getShippingZipcode());
-			if(dto.getIsBillingAddressDifferent().equals("true")) {
+			if(dto.getIsBillingAddressDifferent() !=null) {
 				billingAdd = new BillingAddress(dto.getBillingStreet(),dto.getBillingCity(),dto.getBillingState(),dto.getBillingCountry(),dto.getBillingZipcode());
 			}else {
 				billingAdd = new BillingAddress(dto.getShippingStreet(),dto.getShippingCity(),dto.getShippingState(),dto.getShippingCountry(),dto.getShippingZipcode());
@@ -126,12 +127,12 @@ public class PlaceOrderServiceImpl implements PlaceOrderService{
 		 else if(cart != null) {
 			 order = new Order(new Date() ,"Order Pending" , cart.getGrandTotal() , user , shippAdd , billAdd, orderId );
 			List<CartItem> cartItems =  cart.getCartItems();
-			//order.setCartitem(cartItems);
-			orderRepo.save(order);
-			
 			for(CartItem cartItem : cartItems) {
 				cartItem.setOrder(order);
+//				//cartRepo.save(cartItem);
 			}
+//			order.setCartitem(cartItems);
+			orderRepo.save(order);
 			cartRepo.saveAll(cartItems);
 		}
 		

@@ -27,8 +27,7 @@ public class User {
 	private String lastName;
 	private String email;
 	private String phone;
-	@Column(name = "user_role")
-	private String userRole;
+
 	
 	@OneToOne(mappedBy ="user")
 	@JsonIgnore
@@ -59,8 +58,8 @@ public class User {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public User(String username, String password, String firstName, String lastName, String email, String phone,
-			String userRole) {
+	public User(String username, String password, String firstName, String lastName, String email, String phone)
+		{
 		super();
 		this.username = username;
 		this.password = password;
@@ -68,7 +67,6 @@ public class User {
 		this.lastName = lastName;
 		this.email = email;
 		this.phone = phone;
-		this.userRole = userRole;
 	}
 	public long getId() {
 		return id;
@@ -111,12 +109,6 @@ public class User {
 	}
 	public void setPhone(String phone) {
 		this.phone = phone;
-	}
-	public String getUserRole() {
-		return userRole;
-	}
-	public void setUserRole(String userRole) {
-		this.userRole = userRole;
 	}
 	public ShoppingCart getShoppingCart() {
 		return shoppingCart;

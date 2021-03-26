@@ -84,8 +84,6 @@ public class PlaceOrderController {
 	@Autowired
 	private PaymentRepository paymentRepo;
 	
-	@Autowired
-	private Environment env;
 	
 	@GetMapping("/")
 	public ModelAndView addressPage() {
@@ -99,7 +97,7 @@ public class PlaceOrderController {
 			
 		}else {
 			mv.addObject("q" , "0");
-			mv.setViewName("AddressPage");
+			mv.setViewName("NewFile2");
 		}
 		return mv;
 	}
@@ -114,8 +112,8 @@ public class PlaceOrderController {
 	       try { 
 		 	TreeMap<String, String> parameters = new TreeMap<>();
 	        paytmDetails.getDetails().forEach((k, v) -> parameters.put(k, v));
-	        parameters.put("MOBILE_NO", env.getProperty("paytm.mobile"));
-	        parameters.put("EMAIL", env.getProperty("paytm.email"));
+	        parameters.put("MOBILE_NO",order.getUser().getPhone());
+	        parameters.put("EMAIL", order.getUser().getEmail());
 	        parameters.put("ORDER_ID", order.getOrderNo());
 	        parameters.put("TXN_AMOUNT", String.valueOf(order.getTotal()));
 	        parameters.put("CUST_ID", String.valueOf(order.getUser().getId()));
@@ -257,13 +255,10 @@ public class PlaceOrderController {
         mv.addObject("orders",order);
       
        
-        mv.setViewName("OrderDetailPage");
+        mv.setViewName("redirect:/order/orderdetail/"+order.getOrderNo());
         
         return mv;
     }
-	
-	
-	
 	
 
 	private Response createorderDelivery(String wayBill , Order order) {

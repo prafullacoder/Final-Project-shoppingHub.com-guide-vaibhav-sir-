@@ -12,7 +12,7 @@
 
 <body>
 	<div
-		style="width: 100vw; height: 70vh; background: linear-gradient(rgba(0, 0, 0, 0.01), #009688)"
+		style="width: 100vw; height: 83vh; background: linear-gradient(rgba(0, 0, 0, 0.01), #009688)"
 		class=" d-flex justify-content-center align-items-center m-0 p-0">
 		<form action="/user/login" method="post" style="background-color: light;width:30% ; height:70%"
 			class="rounded p-4">
@@ -30,20 +30,18 @@
 				<input type="password" class="form-control"
 					placeholder="Enter password" name="password" autocomplete="off"/>
 			</div>
-			<div class="mt-4">
+			<div class="mt-4 d-flex justify-content-between">
+			<div>
 				<button type="submit" class="btn btn-primary btn-lg btn-block">Sign
 					in</button>
 
 			</div>
-			<p class="forgot-password text-right d-flex justify-content-center mt-3" >
-				
+			<div>
 				<a href="/user/register-views" class="p-1 text-dark">Create An Account</a>
-			</p>
+			<div>
+			</div>
 		</form>
 	</div>
 </body>
 
-<footer>
-<%@include file="footer.jsp" %>
-</footer>
 </html>

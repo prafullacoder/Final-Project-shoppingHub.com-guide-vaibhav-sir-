@@ -91,8 +91,7 @@ public class CartController {
 		if(cart != null) {
 			System.out.println(cart.getId());
 			mv.setViewName("redirect:/cart/showcart");
-			mv.addObject("carts",cart.getCartItems());
-			mv.addObject("total" , cart.getGrandTotal());
+			
 		}
 		else
 			mv.setViewName("redirect:/user/login-views");
@@ -103,8 +102,7 @@ public class CartController {
 	public ModelAndView removeQty(@PathVariable long id) {
 		ModelAndView mv = new ModelAndView("redirect:/cart/showcart");
 		ShoppingCart cart = cartService.removeQty(id);
-		mv.addObject("carts" , cart.getCartItems());
-		mv.addObject("total", cart.getGrandTotal());
+		
 		return mv;
 	}
 	
@@ -112,8 +110,7 @@ public class CartController {
 	public ModelAndView deleteCartItem(@PathVariable long id) {
 		ModelAndView mv = new ModelAndView("redirect:/cart/showcart");
 		ShoppingCart cart = cartService.deleteCartItem(id);
-		mv.addObject("carts" , cart.getCartItems());
-		mv.addObject("total", cart.getGrandTotal());
+		
 		return mv;
 	}
 	

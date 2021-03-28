@@ -1,5 +1,7 @@
 package com.shoppinghub.dto;
 
+import java.util.Arrays;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Response {
@@ -41,6 +43,15 @@ public class Response {
     private String cashPickups;
     
     
+
+	@Override
+	public String toString() {
+		return "Response [cashPickupsCount=" + cashPickupsCount + ", codCount=" + codCount + ", success=" + success
+				+ ", packageCount=" + packageCount + ", uploadWbn=" + uploadWbn + ", replacementCount="
+				+ replacementCount + ", codAmount=" + codAmount + ", prepaidCount=" + prepaidCount + ", rmk=" + rmk
+				+ ", pickupsCount=" + pickupsCount + ", packages=" + Arrays.toString(packages) + ", cashPickups="
+				+ cashPickups + "]";
+	}
 
 	public Response() {
 		super();

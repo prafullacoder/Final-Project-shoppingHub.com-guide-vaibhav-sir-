@@ -1,5 +1,7 @@
 package com.shoppinghub.dto;
 
+import java.util.Arrays;
+
 public class Packages {
 	
 	private String status;
@@ -30,6 +32,15 @@ public class Packages {
 		this.payment = payment;
 		this.serviceable = serviceable;
 		this.refnum = refnum;
+	}
+	
+	
+	
+	@Override
+	public String toString() {
+		return "Packages [status=" + status + ", client=" + client + ", sort_code=" + sort_code + ", remarks="
+				+ Arrays.toString(remarks) + ", waybill=" + waybill + ", cod_amount=" + cod_amount + ", payment="
+				+ payment + ", serviceable=" + serviceable + ", refnum=" + refnum + "]";
 	}
 	public String getStatus() {
 		return status;

@@ -142,9 +142,13 @@ public class PlaceOrderController {
     	 String txnAmount=null;
     	 String txDate=null;
     	 String txnId=null;
+    	 
+    	 
         Map<String, String[]> mapData = request.getParameterMap();
         System.out.println(mapData);
+        
         TreeMap<String, String> parameters = new TreeMap<String, String>();
+        
         String paytmChecksum = "";
         for (Entry<String, String[]> requestParamsEntry : mapData.entrySet()) {
             if ("CHECKSUMHASH".equalsIgnoreCase(requestParamsEntry.getKey())){
@@ -213,18 +217,7 @@ public class PlaceOrderController {
             	 order.setPayment(payment);
                 if (parameters.get("RESPCODE").equals("01")) {
                     result = "Payment Successful";
-                    List<CartItem> cartItemList =  cartRepo.findByOrder(order);
-                    ShoppingCart cart=null;
-                    if(cartItemList != null && !cartItemList.isEmpty())
-                     cart= cartItemList.get(0).getShopCart();
-                	for(CartItem cartItem : cartItemList) {
-        				cartItem.setOrder(order);
-        				cartItem.setShopCart(null);
-        			}
-                	cartRepo.saveAll(cartItemList);
-                	if(cart != null) {
-                	shoppingCart.delete(cart);
-                	}
+                
                     order.setOrderStatus("Order Placed");
                     String wayBill = getWayBill();
                     System.out.println(wayBill);

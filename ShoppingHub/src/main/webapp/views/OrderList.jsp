@@ -23,23 +23,25 @@
 		<th style="text-align:center">Product Name</th>
 		<th style="text-align:center">Quantity</th>
 		<th style="text-align:center">Ammount</th>
+		<th style="text-align:center">Order Status</th>
 		
 	</tr>
 	</thead>
 	<tbody>
-	<c:forEach var="orderList" items="${order}">
+	<c:forEach var="order" items="${order}">
 	
 		<tr>
-			<td style="text-align:center"><a href="/order/orderdetail/${orderList.orderNo}">${orderList.orderNo}</a></td>
+			<td style="text-align:center"><a href="/order/orderdetail/${order.orderNo}">${order.orderNo}</a></td>
 			<td style="text-align:center">
-			<c:forEach var="cart" items = "${orderList.cartitem}">
+			<c:forEach var="cart" items = "${order.cartitem}">
 			${cart.product.productName}<br>
 			</c:forEach></td>
 			<td style="text-align:center">
-			<c:forEach var="cart" items = "${orderList.cartitem}">
+			<c:forEach var="cart" items = "${order.cartitem}">
 			${cart.qty}<br>
 			</c:forEach></td>
-			<td style="text-align:center">${orderList.total}</td>
+			<td style="text-align:center">${order.total}</td>
+			<td style="text-align:center">${order.orderStatus}</td>
 			
 		</tr>
 		

@@ -31,7 +31,7 @@
 	</tr>
 	<c:forEach var="shippAdd" items="${shippingAddress}">
 		<tr>
-			<td style="text-align:center"><input type="radio" name="shippingAddressid" value="${shippAdd.id}"></input></td>
+			<td style="text-align:center"><input type="radio" name="shippingAddressid" value="${shippAdd.id}" required></input></td>
 			<td style="text-align:center">${shippAdd.street}</td>
 			<td style="text-align:center">${shippAdd.city}</td>
 			<td style="text-align:center">${shippAdd.state}</td>
@@ -55,7 +55,7 @@
 	</tr>
 		<c:forEach var="billAdd" items="${billingAddress}">
 		<tr>
-			<td style="text-align:center"><input type="radio" name="billingAddressid" value="${billAdd.id}"></input></td>
+			<td style="text-align:center"><input type="radio" name="billingAddressid" value="${billAdd.id}" required></input></td>
 			<td style="text-align:center">${billAdd.street}</td>
 			<td style="text-align:center">${billAdd.city}</td>
 			<td style="text-align:center">${billAdd.state}</td>

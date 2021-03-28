@@ -126,15 +126,22 @@ public class PlaceOrderServiceImpl implements PlaceOrderService{
 			}
 		 else if(cart != null) {
 			 order = new Order(new Date() ,"Order Pending" , cart.getGrandTotal() , user , shippAdd , billAdd, orderId );
+			 orderRepo.save(order);
 			List<CartItem> cartItems =  cart.getCartItems();
-			for(CartItem cartItem : cartItems) {
+			CartItem[] cartItemArray = cartItems.toArray(new CartItem[cartItems.size()]); 
+			for(CartItem cartItem : cartItemArray) {
 				cartItem.setOrder(order);
-//				//cartRepo.save(cartItem);
+				cartItem.setShopCart(null);
+				cartRepo.save(cartItem);
+			
 			}
+			shoppingCart.delete(cart);
+			
 //			order.setCartitem(cartItems);
-			orderRepo.save(order);
-			cartRepo.saveAll(cartItems);
+			
+			//cartRepo.saveAll(cartItemArray);
 		}
+		 
 		
 		
 		return order;

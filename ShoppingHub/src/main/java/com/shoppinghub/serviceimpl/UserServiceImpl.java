@@ -20,13 +20,19 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public String createUser(User user) {
-		try {
 		
+		User users = userRepo.findByUsername(user.getUsername());
+		
+		
+		try {
+			if(users != null) {
+				return "Username already exists";
+			}
 			userRepo.save(user);
-			return "successfull";
+			return "User register successfully";
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "unsuccessfull";
+			return "User registration unsuccessfull";
 		}
 	}
 	

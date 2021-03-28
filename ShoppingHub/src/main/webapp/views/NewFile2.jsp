@@ -31,28 +31,28 @@
 						<div class="mb-3">
 							<label for="exampleInputaddress" class="form-label">Address</label>
 							<input type="text" class="form-control" name="shippingStreet"
-								aria-describedby="emailHelp" required>
+								aria-describedby="emailHelp" required autocomplete="off">
 							<div id="emailHelp" class="form-text">Street/Area/Apartment
 								Details</div>
 						</div>
 						<div class="mb-3">
 							<label for="exampleInputcity" class="form-label">City/District</label>
-							<input type="text" class="form-control" name="shippingCity"
-								required>
+							<input type="text" class="form-control" name="shippingCity" pattern="[A-Za-z]+"
+								required autocomplete="off">
 						</div>
 						<div class="mb-3">
 							<label for="exampleInputstate" class="form-label">State</label> <input
-								type="text" class="form-control" name="shippingState" required>
+								type="text" class="form-control" name="shippingState" pattern="[A-Za-z]+" required autocomplete="off">
 						</div>
 						<div class="mb-3">
 							<label for="exampleInputcountry" class="form-label">Country</label>
-							<input type="text" class="form-control" name="shippingCountry"
-								required>
+							<input type="text" class="form-control" name="shippingCountry" pattern="[A-Za-z]+"
+								required autocomplete="off">
 						</div>
 						<div class="mb-3">
 							<label for="exampleInputpin" class="form-label">Area-Pincode</label>
-							<input type="text" class="form-control" name="shippingZipcode"
-								required>
+							<input type="text" class="form-control" name="shippingZipcode" pattern="[0-9]{6}"
+								required autocomplete="off">
 						</div>
 						
 					</div>
@@ -67,28 +67,28 @@
 					<div class="bg-light shadow-sm pt-4 pl-2 pr-2 pb-2">
 						<div class="mb-3">
 							<label for="exampleInputaddress" class="form-label">Address</label>
-							<input type="text" class="form-control" name="billingStreet"
+							<input type="text" class="form-control billingAddress" name="billingStreet"
 								aria-describedby="emailHelp" >
 							<div id="emailHelp" class="form-text">Street/Area/Apartment
 								Details</div>
 						</div>
 						<div class="mb-3">
 							<label for="exampleInputcity" class="form-label">City/District</label>
-							<input type="text" class="form-control" name="billingCity"
+							<input type="text" class="form-control billingAddress" name="billingCity" pattern="[A-Za-z]+"
 								>
 						</div>
 						<div class="mb-3">
 							<label for="exampleInputstate" class="form-label">State</label> <input
-								type="text" class="form-control" name="billingState" >
+								type="text" class="form-control billingAddress" name="billingState" pattern="[A-Za-z]+" >
 						</div>
 						<div class="mb-3">
 							<label for="exampleInputcountry" class="form-label">Country</label>
-							<input type="text" class="form-control" name="billingCountry"
+							<input type="text" class="form-control billingAddress" name="billingCountry" pattern="[A-Za-z]+"
 								>
 						</div>
 						<div class="mb-3">
 							<label for="exampleInputpin" class="form-label">Area-Pincode</label>
-							<input type="text" class="form-control" name="billingZipcode"
+							<input type="text" class="form-control billingAddress" name="billingZipcode" pattern="[0-9]{6}"
 								>
 						</div>
 						
@@ -126,14 +126,24 @@ function handleClick($this){
 	var billingAddress = document.getElementById('billingAddress');
 	 billingAddress.style.display = $this.checked ? null : "none";
 	 var name = "col d-flex justify-content-center";
+	 let x = document.querySelectorAll(".billingAddress");
  	var arr = name.split(" ");
 	  if ($this.checked){
 	  	var i;
 	  	 for(i=0;i<arr.length;i++ ) {
 	    	billingAddress.className += " " +arr[i];
 	    }
+	    
+	    var j;
+	    for(j=0;j<x.length;j++){
+			x[j].setAttribute("required","True");	    
+	    }
 	  }else{
 	  	billingAddress.className='';
+	  	var j;
+	  	  for(j=0;j<x.length;j++){
+			x[j].removeAttribute("required")   
+	    }
 	  }
 	 
 }</script>

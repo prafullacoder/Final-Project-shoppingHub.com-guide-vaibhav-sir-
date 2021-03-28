@@ -1,9 +1,12 @@
+<%@page import="com.shoppinghub.entity.Order"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     <%
   	if(session.getAttribute("userId") == null){
 		response.sendRedirect("/user/login-views");
-	}
+  	}
+    Order order = (Order)request.getAttribute("orders");
+   
   	%>
 <!DOCTYPE html>
 <html>
@@ -26,11 +29,23 @@
 		<th style="text-align:center">Quantity</th>
 		<th style="text-align:center">Total Ammount</th>
 		<th style="text-align:center">Placed On</th>
+		<%
+			
+			if(order.getOrderStatus().equalsIgnoreCase("Order Placed"))
+			{
+		%>
+		
 		<th style="text-align:center">Tracking Id</th>
-		<th style="text-align:center">Payment Mode</th>
+		<th style="text-align:center">Payment Mode</th> <% } %>
 		<th style="text-align:center">Shipping Address</th>
 		<th style="text-align:center">Order status</th>
-		<th style="text-align:center">button</th>
+			<%
+			
+			if(order.getOrderStatus().equalsIgnoreCase("Order Placed"))
+			{
+		%>
+		
+		<th style="text-align:center">button</th><% } %>
 		
 	</tr>
 		<tr>
@@ -58,8 +73,14 @@
 			<td style="text-align:center">${orders.total}</td>
 			<td style="text-align:center">${orders.orderDate}</td>
 			
+					<%
+			
+			if(order.getOrderStatus().equalsIgnoreCase("Order Placed"))
+			{
+		%>
+		
 			<td style="text-align:center">${orders.trackingId}</td>
-			<td style="text-align:center">${orders.payment.paymentMode}</td>
+			<td style="text-align:center">${orders.payment.paymentMode}</td><% } %>
 			<td style="text-align:center">
 			${orders.shipAdd.street}<br>
 			${orders.shipAdd.city}<br>
@@ -68,7 +89,14 @@
 			${orders.shipAdd.zipcode}<br>
 			</td>
 			<td style="text-align:center">${orders.orderStatus}</td>
-			<td style="text-align:center"><a href="/order/trackorder/${orders.orderNo}" class="btn btn-warning">TRACK ORDER</a></td>
+			
+					<%
+			
+			if(order.getOrderStatus().equalsIgnoreCase("Order Placed"))
+			{
+		%>
+		
+			<td style="text-align:center"><a href="/order/trackorder/${orders.orderNo}" class="btn btn-warning">TRACK ORDER</a></td><% } %>
 		</tr>
 </table>
 

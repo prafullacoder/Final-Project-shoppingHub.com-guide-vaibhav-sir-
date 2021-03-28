@@ -52,6 +52,7 @@ public class UserController {
 		 List<Category> categorylist = categoryService.getAllCategory();
 		 mv.addObject("categorylist" , categorylist);
 		String str = userService.createUser(user);
+		mv.addObject("strs",str);
 		mv.addObject("q","1");
 		return mv;
 	}

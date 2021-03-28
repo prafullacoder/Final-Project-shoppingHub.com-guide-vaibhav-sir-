@@ -19,8 +19,8 @@
 		style="width: 100%; height: 90vh; background: linear-gradient(rgba(0, 0, 0, 0.01), #009688), url(background_img.jpg)"
 		class=" d-flex justify-content-center align-items-center m-0 p-0">
 		<form action="/user/createuser" method="post"  style="background-color:light ;width:30% ; height:85%"" class="rounded p-4">
-		<c:if test="${ q==1}">
-		<div class="alert alert-success">Registration successfull</div>
+	<c:if test="${ q==1}">
+		<div class="alert alert-success">"${strs}"</div>
 		</c:if>
 		<div class="d-flex justify-content-center">
 			<h2>Register Here</h2>
@@ -61,14 +61,15 @@
 				<input type="text" class="form-control mb-3"
 					placeholder="Enter phone number" name="phone" pattern="[789][0-9]{9}" required autocomplete="off"/>
 			</div>
-			<div class="mt-3">
+			<div class="mt-1 d-flex justify-content-between">
+			<div>
 				<button type="submit" class="btn btn-primary btn-lg btn-block">Register</button>
 			</div>
 
-		<div class="d-flex justify-content-end">
-			
+			<div>
 				Already registered &nbsp; <a href="/user/login-views" class="p-1 text-light">log
 					in?</a>
+					</div>
 			
 			</div>
 
@@ -81,7 +82,5 @@
 
 </body>
 <div style="500px"></div>
-<footer>
-<%@include file="footer.jsp" %>
-</footer>
+
 </html>
